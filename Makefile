@@ -1,8 +1,17 @@
 #!/usr/bin/env make
 
+# Ensure poetry.lock is up to date before building
+build-scratch:
+	if [ -d ".dbdata" ]; then sudo chmod -R 755 .dbdata; fi
+	docker build --no-cache -t bancho:latest .
+
 build:
 	if [ -d ".dbdata" ]; then sudo chmod -R 755 .dbdata; fi
 	docker build -t bancho:latest .
+
+# New target to update poetry.lock
+update-lock:
+	poetry lock --no-update
 
 run:
 	docker compose up bancho mysql redis
@@ -41,7 +50,5 @@ uninstall:
 	poetry env remove python
 
 # To bump the version number run `make bump version=<major/minor/patch>`
-# (DO NOT USE IF YOU DON'T KNOW WHAT YOU'RE DOING)
-# https://python-poetry.org/docs/cli/#version
 bump:
 	poetry version $(version)

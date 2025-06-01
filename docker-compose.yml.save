@@ -1,13 +1,10 @@
-
-
 services:
   ## shared services
 
   mysql:
     image: mysql:latest
-    command: --bind-address=0.0.0.0
-    ports:
-      - "3306:3306"
+    # ports:
+    #   - ${DB_PORT}:${DB_PORT}
     environment:
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASS}
@@ -51,7 +48,7 @@ services:
     init: true
     volumes:
       - .:/srv/root
-      - /var/osu_data:/srv/root/.data
+      - data:/srv/root/.data
     environment:
       - APP_HOST=${APP_HOST}
       - APP_PORT=${APP_PORT}

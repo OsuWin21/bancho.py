@@ -80,7 +80,7 @@ async def recalculate_score(
     if math.isnan(new_pp) or math.isinf(new_pp):
         new_pp = 0.0
 
-    new_pp = min(new_pp, 9999.999)
+    new_pp = min(new_pp, 9999999.999)
 
     await ctx.database.execute(
         "UPDATE scores SET pp = :new_pp WHERE id = :id",
@@ -89,7 +89,8 @@ async def recalculate_score(
 
     if DEBUG:
         print(
-            f"Recalculated score ID {score['id']} ({score['pp']:.3f}pp -> {new_pp:.3f}pp)",
+            f"""
+            Recalculated score ID {score['id']} ({score['pp']:.3f}pp -> {new_pp:.3f}pp)""",
         )
 
 
@@ -140,8 +141,7 @@ async def recalculate_user(
 
     # calculate new total weighted pp
     weighted_pp = sum(row["pp"] * 0.95**i for i, row in enumerate(best_scores))
-    bonus_pp = 416.6667 * (1 - 0.9994**total_scores)
-    pp = round(weighted_pp + bonus_pp)
+    pp = round(weighted_pp)
 
     await ctx.database.execute(
         "UPDATE stats SET pp = :pp, acc = :acc WHERE id = :id AND mode = :mode",

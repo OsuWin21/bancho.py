@@ -7,6 +7,14 @@ WORKDIR /srv/root
 RUN apt update && apt install --no-install-recommends -y \
     git curl build-essential=12.9 \
     && rm -rf /var/lib/apt/lists/*
+    
+RUN curl https://sh.rustup.rs -sSf -o rustup-init.sh && \
+    sh rustup-init.sh -y --default-toolchain stable && \
+    rm rustup-init.sh
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+RUN rustc --version && cargo --version
+
 
 COPY pyproject.toml poetry.lock ./
 RUN pip install -U pip poetry
