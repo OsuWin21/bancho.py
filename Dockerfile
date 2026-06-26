@@ -8,6 +8,9 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     gcc \
     libc6-dev \
     linux-libc-dev \
+    git \
+    cargo \
+    rustc \
     && rm -rf /var/lib/apt/lists/*
 
 COPY pyproject.toml uv.lock ./
